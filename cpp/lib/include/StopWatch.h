@@ -2,6 +2,7 @@
 
 #include <string>
 #include <ctime>
+#include <chrono>
 
 #include "AutoCloseable.h"
 #include "MeasurementResultCollectable.h"
@@ -9,26 +10,27 @@
 class StopWatch : public AutoCloseable
 {
 public:
+    ~StopWatch();
     StopWatch();
+    StopWatch(bool immediately);
     StopWatch(bool immediately, std::string id, MeasurementResultCollectable *reporter);
 
     bool start();
     bool stop();
     void close() override;
 
-    clock_t getBeginEpochNano();
-    clock_t getEndEpochNano();
-    clock_t getElapsedEpochNano();
-    double getElapsedEpochSec();
-    bool tryElapsedEpochNano(clock_t &c);
+    std::chrono::system_clock::time_point getBeginEpoch();
+    std::chrono::system_clock::time_point getEndEpoch();
+    double getElapsedSec();
+    bool tryElapsedSec(double &c);
     bool isAutomaticallyStopped();
     std::string getLastMessage();
 
 private:
     bool _started;
     bool _automaticallyStopped;
-    clock_t _beginNano;
-    clock_t _endNano;
+    std::chrono::system_clock::time_point _begin;
+    std::chrono::system_clock::time_point _end;
     std::string _id;
     MeasurementResultCollectable *_reporter;
     std::string _lastError;

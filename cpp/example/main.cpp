@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
     auto sw = new StopWatch();
     sw->start();
     sw->stop();
-    std::cout << sw->getElapsedEpochSec() << std::endl;
+    std::cout << sw->getElapsedSec() << std::endl;
 
     return 0;
 }

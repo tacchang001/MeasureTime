@@ -2,14 +2,17 @@
 
 #include "StopWatch.h"
 
+StopWatch::~StopWatch()
+{
+    close();
+}
+
 StopWatch::StopWatch(
     bool immediately,
     std::string id,
     MeasurementResultCollectable *reporter
 ) {
     _started = false;
-    _endNano = 0;
-    _beginNano = 0;
     _id = id;
     _reporter = reporter;
     _automaticallyStopped = false;
@@ -26,12 +29,19 @@ StopWatch::StopWatch()
 
 }
 
+StopWatch::StopWatch(
+    bool immediately
+) : StopWatch(immediately, "", nullptr)
+{
+
+}
+
 bool StopWatch::start()
 {
     if (!_started)
     {
-        _beginNano = clock();
-        _endNano = 0;
+        _begin = std::chrono::system_clock::now();
+        _end = _begin;
         _started = true;
 
         return true;
@@ -44,14 +54,12 @@ bool StopWatch::stop()
 {
     if (_started)
     {
-        _endNano = clock();
+        _end = std::chrono::system_clock::now();
         _started = false;
-        _lastError = "";
-        _automaticallyStopped = false;
 
         if (_reporter != nullptr)
         {
-            MeasurementReport report(_id, getElapsedEpochNano());
+            MeasurementReport report(_id, getElapsedSec());
             _reporter->append(report);
         }
 
@@ -75,31 +83,27 @@ void StopWatch::close()
     }
 }
 
-clock_t StopWatch::getBeginEpochNano()
+std::chrono::system_clock::time_point StopWatch::getBeginEpoch()
 {
-    return _beginNano;
+    return _begin;
 }
 
-clock_t StopWatch::getEndEpochNano()
+std::chrono::system_clock::time_point StopWatch::getEndEpoch()
 {
-    return _endNano;
+    return _end;
 }
 
-clock_t StopWatch::getElapsedEpochNano()
+double StopWatch::getElapsedSec()
 {
-    return _endNano - _beginNano;
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(_end - _begin);
+    return elapsed.count() / double(1000.0 * 1000.0 * 1000.0);
 }
 
-double StopWatch::getElapsedEpochSec()
-{
-    return double(_endNano - _beginNano) / CLOCKS_PER_SEC;
-}
-
-bool StopWatch::tryElapsedEpochNano(clock_t &c)
+bool StopWatch::tryElapsedSec(double &c)
 {
     if (!_started)
     {
-        c = _endNano - _beginNano;
+        c = std::chrono::duration_cast<std::chrono::nanoseconds>(_end - _begin).count() / double(1000.0 * 1000.0 * 1000.0);
 
         return true;
     }

@@ -4,20 +4,20 @@
 
 MeasurementReport::MeasurementReport(
     const std::string id, 
-    clock_t elapseEpochNano
+    double elapsedSec
 ) {
     if (id.empty())
     {
         throw std::invalid_argument("ID must be specified");
     }
     _id = id;
-    _elapseEpochNano = elapseEpochNano;
+    _elapsedSec = elapsedSec;
 }
 
 MeasurementReport::MeasurementReport(const MeasurementReport& rhs)
 {
     _id = rhs._id;
-    _elapseEpochNano = rhs._elapseEpochNano;
+    _elapsedSec = rhs._elapsedSec;
 }
 
 std::string MeasurementReport::getId()
@@ -25,7 +25,7 @@ std::string MeasurementReport::getId()
     return _id;
 }
 
-clock_t MeasurementReport::getElapseEpochNano()
+double MeasurementReport::getElapseSec()
 {
-    return _elapseEpochNano;
+    return _elapsedSec;
 }
