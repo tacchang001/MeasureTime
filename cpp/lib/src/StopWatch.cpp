@@ -59,7 +59,7 @@ bool StopWatch::stop()
 
         if (_reporter != nullptr)
         {
-            MeasurementReport report(_id, getElapsedSec());
+            MeasurementReport report(_id, getElapsedNanoSec());
             _reporter->append(report);
         }
 
@@ -93,17 +93,17 @@ std::chrono::system_clock::time_point StopWatch::getEndEpoch()
     return _end;
 }
 
-double StopWatch::getElapsedSec()
+uint64_t StopWatch::getElapsedNanoSec()
 {
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(_end - _begin);
-    return elapsed.count() / double(1000.0 * 1000.0 * 1000.0);
+    return elapsed.count();
 }
 
-bool StopWatch::tryElapsedSec(double &c)
+bool StopWatch::tryElapsedNanoSec(uint64_t &nano)
 {
     if (!_started)
     {
-        c = std::chrono::duration_cast<std::chrono::nanoseconds>(_end - _begin).count() / double(1000.0 * 1000.0 * 1000.0);
+        nano = std::chrono::duration_cast<std::chrono::nanoseconds>(_end - _begin).count();
 
         return true;
     }

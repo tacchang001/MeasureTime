@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <ctime>
 #include <chrono>
@@ -21,8 +22,8 @@ public:
 
     std::chrono::system_clock::time_point getBeginEpoch();
     std::chrono::system_clock::time_point getEndEpoch();
-    double getElapsedSec();
-    bool tryElapsedSec(double &c);
+    uint64_t getElapsedNanoSec();
+    bool tryElapsedNanoSec(uint64_t &nano);
     bool isAutomaticallyStopped();
     std::string getLastMessage();
 

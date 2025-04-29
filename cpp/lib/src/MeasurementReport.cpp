@@ -4,20 +4,20 @@
 
 MeasurementReport::MeasurementReport(
     const std::string id, 
-    double elapsedSec
+    uint64_t elapsedSec
 ) {
     if (id.empty())
     {
         throw std::invalid_argument("ID must be specified");
     }
     _id = id;
-    _elapsedSec = elapsedSec;
+    _elapsedNanoSec = elapsedSec;
 }
 
 MeasurementReport::MeasurementReport(const MeasurementReport& rhs)
 {
     _id = rhs._id;
-    _elapsedSec = rhs._elapsedSec;
+    _elapsedNanoSec = rhs._elapsedNanoSec;
 }
 
 std::string MeasurementReport::getId()
@@ -25,7 +25,7 @@ std::string MeasurementReport::getId()
     return _id;
 }
 
-double MeasurementReport::getElapseSec()
+uint64_t MeasurementReport::getElapseNanoSec()
 {
-    return _elapsedSec;
+    return _elapsedNanoSec;
 }

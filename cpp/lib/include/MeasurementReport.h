@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <ctime>
 
@@ -7,13 +8,13 @@ class MeasurementReport
 {
 public:
     MeasurementReport() {}
-    MeasurementReport(const std::string id, double elapseSec);
+    MeasurementReport(const std::string id, uint64_t elapseNanoSec);
     MeasurementReport(const MeasurementReport& rhs);
 
     std::string getId();
-    double getElapseSec();
+    uint64_t getElapseNanoSec();
     
 private:
     std::string _id;
-    double _elapsedSec;
+    uint64_t _elapsedNanoSec;
 };
