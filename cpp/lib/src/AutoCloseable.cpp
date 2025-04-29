@@ -3,7 +3,7 @@
 AutoCloseable::~AutoCloseable()
 {
     try {
-        close();
+        Close();
     }
     catch (...)
     {

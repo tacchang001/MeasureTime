@@ -8,16 +8,16 @@
 class MeasurementResult final : public MeasurementResultCollectable
 {
 public:
-    static MeasurementResult* get_instance();
-    static void destroy_instance();
+    static MeasurementResult* GetInstance();
+    static void DestroyInstance();
 
-    void append(const MeasurementReport& report) override;
-    const std::map<clock_t, MeasurementReport> getImmutableRecords();
+    void Append(const MeasurementReport& report) override;
+    const std::map<clock_t, MeasurementReport> GetImmutableRecords();
 
 private:
     MeasurementResult() = default;
 
 private:
-    static MeasurementResult* _instance;
-    std::map<uint64_t, MeasurementReport> _records;
+    static MeasurementResult* instance_;
+    std::map<uint64_t, MeasurementReport> records_;
 };

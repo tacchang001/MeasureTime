@@ -4,7 +4,7 @@
 
 StopWatch::~StopWatch()
 {
-    close();
+    Close();
 }
 
 StopWatch::StopWatch(
@@ -12,14 +12,14 @@ StopWatch::StopWatch(
     std::string id,
     MeasurementResultCollectable *reporter
 ) {
-    _started = false;
-    _id = id;
-    _reporter = reporter;
-    _automaticallyStopped = false;
-    _lastError = "";
+    started_ = false;
+    id_ = id;
+    reporter_ = reporter;
+    automaticallyStopped_ = false;
+    lastError_ = "";
     if (immediately)
     {
-        start();
+        Start();
     }
 }
 
@@ -36,13 +36,13 @@ StopWatch::StopWatch(
 
 }
 
-bool StopWatch::start()
+bool StopWatch::Start()
 {
-    if (!_started)
+    if (!started_)
     {
-        _begin = std::chrono::system_clock::now();
-        _end = _begin;
-        _started = true;
+        begin_ = std::chrono::system_clock::now();
+        end_ = begin_;
+        started_ = true;
 
         return true;
     }
@@ -50,17 +50,17 @@ bool StopWatch::start()
     return false;
 }
 
-bool StopWatch::stop()
+bool StopWatch::Stop()
 {
-    if (_started)
+    if (started_)
     {
-        _end = std::chrono::system_clock::now();
-        _started = false;
+        end_ = std::chrono::system_clock::now();
+        started_ = false;
 
-        if (_reporter != nullptr)
+        if (reporter_ != nullptr)
         {
-            MeasurementReport report(_id, getElapsedNanoSec());
-            _reporter->append(report);
+            MeasurementReport report(id_, GetElapsedNanoSec());
+            reporter_->Append(report);
         }
 
         return true;
@@ -69,41 +69,41 @@ bool StopWatch::stop()
     return false;
 }
 
-void StopWatch::close()
+void StopWatch::Close()
 {
     try {
-        if (!stop())
+        if (!Stop())
         {
-            _automaticallyStopped = true;
+            automaticallyStopped_ = true;
         }
     }
     catch(const std::exception &ex)
     {
-        _lastError = ex.what();
+        lastError_ = ex.what();
     }
 }
 
-std::chrono::system_clock::time_point StopWatch::getBeginEpoch()
+std::chrono::system_clock::time_point StopWatch::GetBeginEpoch()
 {
-    return _begin;
+    return begin_;
 }
 
-std::chrono::system_clock::time_point StopWatch::getEndEpoch()
+std::chrono::system_clock::time_point StopWatch::GetEndEpoch()
 {
-    return _end;
+    return end_;
 }
 
-uint64_t StopWatch::getElapsedNanoSec()
+uint64_t StopWatch::GetElapsedNanoSec()
 {
-    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(_end - _begin);
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end_ - begin_);
     return elapsed.count();
 }
 
-bool StopWatch::tryElapsedNanoSec(uint64_t &nano)
+bool StopWatch::TryElapsedNanoSec(uint64_t &nano)
 {
-    if (!_started)
+    if (!started_)
     {
-        nano = std::chrono::duration_cast<std::chrono::nanoseconds>(_end - _begin).count();
+        nano = std::chrono::duration_cast<std::chrono::nanoseconds>(end_ - begin_).count();
 
         return true;
     }
@@ -111,12 +111,12 @@ bool StopWatch::tryElapsedNanoSec(uint64_t &nano)
     return false;
 }
 
-bool StopWatch::isAutomaticallyStopped()
+bool StopWatch::IsAutomaticallyStopped()
 {
-    return _automaticallyStopped;
+    return automaticallyStopped_;
 }
 
-std::string StopWatch::getLastMessage()
+std::string StopWatch::GetLastMessage()
 {
-    return _lastError;
+    return lastError_;
 }

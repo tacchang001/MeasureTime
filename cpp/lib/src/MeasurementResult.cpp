@@ -1,35 +1,35 @@
 #include "MeasurementResult.h"
 
-MeasurementResult* MeasurementResult::_instance = nullptr;
+MeasurementResult* MeasurementResult::instance_ = nullptr;
 
-MeasurementResult* MeasurementResult::get_instance()
+MeasurementResult* MeasurementResult::GetInstance()
 {
-    if (_instance == nullptr)
+    if (instance_ == nullptr)
     {
-        _instance = new MeasurementResult();
+        instance_ = new MeasurementResult();
     }
     
-    return _instance;
+    return instance_;
 }
 
-void MeasurementResult::destroy_instance()
+void MeasurementResult::DestroyInstance()
 {
-    if (_instance != nullptr)
+    if (instance_ != nullptr)
     {
-        delete _instance;
-        _instance = nullptr;
+        delete instance_;
+        instance_ = nullptr;
     }
 }
 
-void MeasurementResult::append(const MeasurementReport& report)
+void MeasurementResult::Append(const MeasurementReport& report)
 {
     uint64_t key = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    _records[key] = report;
+    records_[key] = report;
 }
 
-const std::map<clock_t, MeasurementReport> MeasurementResult::getImmutableRecords()
+const std::map<clock_t, MeasurementReport> MeasurementResult::GetImmutableRecords()
 {
     std::map<clock_t, MeasurementReport> result;
-    std::copy(_records.begin(), _records.end(), std::inserter(result, result.end()));
+    std::copy(records_.begin(), records_.end(), std::inserter(result, result.end()));
     return result;
 }
