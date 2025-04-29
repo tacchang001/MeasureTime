@@ -58,6 +58,7 @@ TEST(test_StopWatch, test2) {
 TEST(test_StopWatch, test3) {
     MeasurementResult* reporter = MeasurementResult::GetInstance();
     EXPECT_NE(nullptr, reporter);
+    reporter->Clear();
 
     chrono::milliseconds waitTime{50};
 

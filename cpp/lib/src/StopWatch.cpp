@@ -1,6 +1,7 @@
 #include <stdexcept>
 
 #include "StopWatch.h"
+#include "MeasurementResult.h"
 
 StopWatch::~StopWatch()
 {
@@ -14,7 +15,6 @@ StopWatch::StopWatch(
 ) {
     started_ = false;
     id_ = id;
-    reporter_ = reporter;
     automaticallyStopped_ = false;
     lastError_ = "";
     if (immediately)
@@ -57,10 +57,11 @@ bool StopWatch::Stop()
         end_ = std::chrono::system_clock::now();
         started_ = false;
 
-        if (reporter_ != nullptr)
+        auto reporter = MeasurementResult::GetInstance();
+        if (reporter != nullptr)
         {
             MeasurementReport report(id_, GetElapsedNanoSec());
-            reporter_->Append(report);
+            reporter->Append(report);
         }
 
         return true;

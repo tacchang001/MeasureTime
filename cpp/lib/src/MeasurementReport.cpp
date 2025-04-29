@@ -6,10 +6,6 @@ MeasurementReport::MeasurementReport(
     const std::string id, 
     uint64_t elapsed_sec
 ) {
-    if (id.empty())
-    {
-        throw std::invalid_argument("ID must be specified");
-    }
     id_ = id;
     elapsed_nano_sec_ = elapsed_sec;
 }

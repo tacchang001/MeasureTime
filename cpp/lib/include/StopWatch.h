@@ -33,6 +33,5 @@ private:
     std::chrono::system_clock::time_point begin_;
     std::chrono::system_clock::time_point end_;
     std::string id_;
-    MeasurementResultCollectable *reporter_;
     std::string lastError_;
 };
