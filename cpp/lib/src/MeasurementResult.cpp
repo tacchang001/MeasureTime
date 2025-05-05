@@ -4,6 +4,7 @@
 #include <vector>
 #include <numeric>
 #include <cmath>
+#include <iostream>
 
 MeasurementResult* MeasurementResult::instance_ = nullptr;
 
@@ -37,10 +38,19 @@ void MeasurementResult::Clear()
     records_.clear();
 }
 
+// CPUクロック・カウントを取得する
+__inline__ uint64_t GetCpuCount() {
+    uint64_t a, d;
+    __asm__ volatile ("rdtsc" : "=a" (a), "=d" (d));
+    return (d<<32) | a;
+}
+
 void MeasurementResult::Append(const MeasurementReport& report)
 {
     sorted_ = false;
-    uint64_t key = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    // これではだめだ。なの秒以下の差があればユニークキーにならない
+    // uint64_t key = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    uint64_t key = GetCpuCount();
     records_[key] = report;
 }
 
@@ -57,10 +67,10 @@ void MeasurementResult::Sort()
     for (const auto& pair : records_)
     {
         auto report = pair.second;
-        v.push_back(report.GetElapseNanoSec());
+        v.push_back(report.GetElapseCount());
     }
 
-    std::sort(v.begin(), v.end());
+    std::sort(v.begin(), v.end(), std::greater<double>());
 
     max_ = *std::max_element(std::begin(v), std::end(v));
     min_ = *std::min_element(std::begin(v), std::end(v));

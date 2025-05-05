@@ -2,7 +2,9 @@
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(${PROJECT_NAME} 
+set (LIBNAME MeasureTime)
+
+add_library(${LIBNAME}
     STATIC
         src/StopWatch.cpp
         src/AutoCloseable.cpp
@@ -10,17 +12,17 @@ add_library(${PROJECT_NAME}
         src/MeasurementResult.cpp
         )
 
-target_include_directories(${PROJECT_NAME}
+target_include_directories(${LIBNAME}
     PRIVATE
         include
         )
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${LIBNAME}
     )
 
 add_definitions(-DDEBUG)
 
-target_link_options(${PROJECT_NAME}
+target_link_options(${LIBNAME}
     PRIVATE 
 #        "-Wl,--no-undefined"
 #        "-Wl,-verbose"

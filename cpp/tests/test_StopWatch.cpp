@@ -18,13 +18,13 @@ TEST(test_StopWatch, test1) {
 
     {
         uint64_t nano = 0L;
-        EXPECT_FALSE(sp->TryElapsedNanoSec(nano));
+        EXPECT_FALSE(sp->TryElapsedCount(nano));
         EXPECT_TRUE(sp->GetLastMessage().empty());
         EXPECT_TRUE(sp->Stop());
-        EXPECT_TRUE(sp->TryElapsedNanoSec(nano));
+        EXPECT_TRUE(sp->TryElapsedCount(nano));
     }
     {
-        uint64_t nano = sp->GetElapsedNanoSec();
+        uint64_t nano = sp->GetElapsedCount();
         EXPECT_TRUE(nano >= (chrono::duration_cast<chrono::nanoseconds>(waitTime).count()));
         EXPECT_TRUE(sp->GetLastMessage().empty());
         EXPECT_FALSE(sp->IsAutomaticallyStopped());
@@ -42,13 +42,13 @@ TEST(test_StopWatch, test2) {
 
     {
         uint64_t nano = 0L;
-        EXPECT_FALSE(sp->TryElapsedNanoSec(nano));
+        EXPECT_FALSE(sp->TryElapsedCount(nano));
         EXPECT_TRUE(sp->GetLastMessage().empty());
         EXPECT_TRUE(sp->Stop());
-        EXPECT_TRUE(sp->TryElapsedNanoSec(nano));
+        EXPECT_TRUE(sp->TryElapsedCount(nano));
     }
     {
-        uint64_t nano = sp->GetElapsedNanoSec();
+        uint64_t nano = sp->GetElapsedCount();
         EXPECT_TRUE(nano >= chrono::duration_cast<chrono::nanoseconds>(waitTime).count());
         EXPECT_TRUE(sp->GetLastMessage().empty());
         EXPECT_FALSE(sp->IsAutomaticallyStopped());
@@ -69,13 +69,13 @@ TEST(test_StopWatch, test3) {
         EXPECT_EQ(0, usleep(chrono::duration_cast<chrono::microseconds>(waitTime).count()));
 
         uint64_t nano = 0L;
-        EXPECT_FALSE(sp.TryElapsedNanoSec(nano));
+        EXPECT_FALSE(sp.TryElapsedCount(nano));
         EXPECT_TRUE(sp.GetLastMessage().empty());
     }
 
     const std::map<clock_t, MeasurementReport> records = reporter->GetImmutableRecords();
     EXPECT_TRUE(records.size() == 1);
     auto item = records.begin()->second;
-    uint64_t nano = item.GetElapseNanoSec();
+    uint64_t nano = item.GetElapseCount();
     EXPECT_TRUE(nano >= chrono::duration_cast<chrono::nanoseconds>(waitTime).count());
 }

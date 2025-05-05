@@ -2,12 +2,13 @@
 
 #include <cstdint>
 #include <string>
-#include <ctime>
-#include <chrono>
 
 #include "AutoCloseable.h"
 #include "MeasurementResultCollectable.h"
 
+// GCC4環境下ではstd::chronoの精度が悪くsin関数程度では処理速度がでない（ゼロ）ため
+// 時間単位はCPUクロックカウンタの値を使う。そのため、このコードはIntel CPUのみで
+// 使用可能。他のCPUではGetCpuCount()を書き換える必要がある。
 class StopWatch : public AutoCloseable
 {
 public:
@@ -20,18 +21,20 @@ public:
     bool Stop();
     void Close() override;
 
-    std::chrono::system_clock::time_point GetBeginEpoch();
-    std::chrono::system_clock::time_point GetEndEpoch();
-    uint64_t GetElapsedNanoSec();
-    bool TryElapsedNanoSec(uint64_t &nano);
+    uint64_t GetBeginEpoch();
+    uint64_t GetEndEpoch();
+    uint64_t GetElapsedCount();
+    bool TryElapsedCount(uint64_t &count);
     bool IsAutomaticallyStopped();
     std::string GetLastMessage();
+
+    static uint64_t GetCpuCount();
 
 private:
     bool started_;
     bool automaticallyStopped_;
-    std::chrono::system_clock::time_point begin_;
-    std::chrono::system_clock::time_point end_;
+    uint64_t begin_;
+    uint64_t end_;
     std::string id_;
     std::string lastError_;
 };

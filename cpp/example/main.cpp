@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
     auto sw = new StopWatch();
     sw->Start();
     sw->Stop();
-    std::cout << sw->GetElapsedNanoSec() << std::endl;
+    std::cout << sw->GetElapsedCount() << std::endl;
 
     return 0;
 }

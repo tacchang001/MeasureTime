@@ -32,7 +32,7 @@ TEST(test_MeasurementResult, test1) {
     {
         mr->Append(reports[i]);
     }
-
+    
     EXPECT_EQ(19.0, mr->Max());
     EXPECT_EQ(10.0, mr->Min());
     EXPECT_EQ(14.5, mr->Average());
