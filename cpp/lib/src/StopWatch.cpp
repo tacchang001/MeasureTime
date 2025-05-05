@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <iostream>
 
 #include "StopWatch.h"
 #include "MeasurementResult.h"
@@ -40,7 +41,7 @@ bool StopWatch::Start()
 {
     if (!started_)
     {
-        begin_ = std::chrono::system_clock::now();
+        begin_ = StopWatch::GetCpuCount();
         end_ = begin_;
         started_ = true;
 
@@ -54,13 +55,13 @@ bool StopWatch::Stop()
 {
     if (started_)
     {
-        end_ = std::chrono::system_clock::now();
+        end_ = StopWatch::GetCpuCount();
         started_ = false;
 
         auto reporter = MeasurementResult::GetInstance();
         if (reporter != nullptr)
         {
-            MeasurementReport report(id_, GetElapsedNanoSec());
+            MeasurementReport report(id_, GetElapsedCount());
             reporter->Append(report);
         }
 
@@ -84,27 +85,26 @@ void StopWatch::Close()
     }
 }
 
-std::chrono::system_clock::time_point StopWatch::GetBeginEpoch()
+uint64_t StopWatch::GetBeginEpoch()
 {
     return begin_;
 }
 
-std::chrono::system_clock::time_point StopWatch::GetEndEpoch()
+uint64_t StopWatch::GetEndEpoch()
 {
     return end_;
 }
 
-uint64_t StopWatch::GetElapsedNanoSec()
+uint64_t StopWatch::GetElapsedCount()
 {
-    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end_ - begin_);
-    return elapsed.count();
+    return end_ - begin_;
 }
 
-bool StopWatch::TryElapsedNanoSec(uint64_t &nano)
+bool StopWatch::TryElapsedCount(uint64_t &count)
 {
     if (!started_)
     {
-        nano = std::chrono::duration_cast<std::chrono::nanoseconds>(end_ - begin_).count();
+        count = end_ - begin_;
 
         return true;
     }
@@ -120,4 +120,11 @@ bool StopWatch::IsAutomaticallyStopped()
 std::string StopWatch::GetLastMessage()
 {
     return lastError_;
+}
+
+// CPUクロック・カウントを取得する
+__inline__ uint64_t StopWatch::GetCpuCount() {
+    uint64_t a, d;
+    __asm__ volatile ("rdtsc" : "=a" (a), "=d" (d));
+    return (d<<32) | a;
 }

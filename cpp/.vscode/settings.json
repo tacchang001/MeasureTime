@@ -1,10 +1,10 @@
 {
     // "Microsoft C/C++ 拡張機能の設定"
-    "C_Cpp.default.compilerPath": "D:/msys64/ucrt64/bin/g++.exe",
+    "C_Cpp.default.compilerPath": "D:/msys64/mingw64.GCC485/bin/g++.exe",
     "C_Cpp.default.includePath": [
         "${defualt}",
         "${workspaceFolder}/cpp/include",
-        "d:/msys64/ucrt64/include"
+        "d:/msys64/mingw64.GCC485/include"
     ],
     "files.associations": {
         "array": "cpp",
@@ -77,6 +77,8 @@
         "semaphore": "cpp",
         "stop_token": "cpp",
         "thread": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp"
     },
 }

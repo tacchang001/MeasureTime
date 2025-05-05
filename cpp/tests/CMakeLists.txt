@@ -13,7 +13,7 @@ FetchContent_Declare(
   googletest
   DOWNLOAD_EXTRACT_TIMESTAMP ON
   GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        v1.16.0
+  GIT_TAG        release-1.8.0
 )
 if (WIN32)
 # For Windows: Prevent overriding the parent project's compiler/linker settings

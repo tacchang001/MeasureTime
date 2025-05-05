@@ -8,13 +8,13 @@ class MeasurementReport
 {
 public:
     MeasurementReport() {}
-    MeasurementReport(const std::string id, uint64_t elapse_nano_sec);
+    MeasurementReport(const std::string id, uint64_t elapse_count);
     MeasurementReport(const MeasurementReport& rhs);
 
     std::string GetId();
-    uint64_t GetElapseNanoSec();
+    uint64_t GetElapseCount();
     
 private:
     std::string id_;
-    uint64_t elapsed_nano_sec_;
+    uint64_t elapsed_count_;
 };
