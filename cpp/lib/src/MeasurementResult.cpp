@@ -60,12 +60,7 @@ void MeasurementResult::Sort()
         v.push_back(report.GetElapseNanoSec());
     }
 
-    std::sort(v.begin(), v.end(),
-        [](double& a, double& b) 
-        {
-            return a < b; // 昇順にソート
-        }
-    );
+    std::sort(v.begin(), v.end());
 
     max_ = *std::max_element(std::begin(v), std::end(v));
     min_ = *std::min_element(std::begin(v), std::end(v));
